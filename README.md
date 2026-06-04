@@ -20,7 +20,7 @@ The framework has three components:
 
 1. **Typed hallucination profiles** — stratify hallucination rates across four legally-motivated claim categories (numeric, temporal, obligation/entitlement, factual) instead of reporting a single aggregate rate.
 2. **Risk Direction Index (RDI)** — a signed scalar that separates *omission* failures (dropping real obligations) from *invention* failures (asserting ones that don't exist), even when two systems score identically on aggregate hallucination rate.
-3. **Typed multi-agent debate pipeline** — a 7-role LangGraph state machine (Extractor → Skeptic/Supporter → Route → Re-extractor / Arbiter → Verifier → Judge) whose Skeptic challenges and asymmetric Add/Delete gates are calibrated from the measured per-type failure profile rather than chosen generically.
+3. **Typed multi-agent debate pipeline** — a 6-role LangGraph state machine (Skeptic, Supporter, Re-extractor, Arbiter, Verifier, Judge) operating on a baseline extraction, whose Skeptic challenges and asymmetric Add/Delete gates are calibrated from the measured per-type failure profile rather than chosen generically.
 
 For headline results, the typed failure ordering, RDI values per model, and the gemma-debate composite leaderboard, see the paper.
 
