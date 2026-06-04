@@ -2,8 +2,13 @@
 
 **Typed hallucination auditing and calibrated multi-agent debate for trustworthy legal AI.**
 
-Companion code for the ICML 2026 AIWILD workshop paper:
-*"LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI"* — Lalit Yadav, Akshaj Gurugubelli.
+Companion code for:
+
+> Lalit Yadav, Akshaj Gurugubelli. *"LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI."* Proceedings of the 43rd International Conference on Machine Learning, Seoul, South Korea. PMLR 306, 2026.
+
+**Authors:**
+- Lalit Yadav — Independent Researcher, Sunnyvale, CA, USA — `lalitdv94@gmail.com` (correspondence)
+- Akshaj Gurugubelli — Independent Researcher, San Diego, CA, USA
 
 ---
 
@@ -117,7 +122,11 @@ The gemma-4-26B-A4B backbone used in Experiment 2 is released by Google under Ap
 @inproceedings{yadav2026legalhallulens,
   title     = {LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI},
   author    = {Yadav, Lalit and Gurugubelli, Akshaj},
-  booktitle = {ICML 2026 Workshop on Agents in the Wild (AIWILD)},
+  booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {306},
+  address   = {Seoul, South Korea},
+  publisher = {PMLR},
   year      = {2026},
 }
 ```

@@ -1,11 +1,14 @@
 cff-version: 1.2.0
-message: "If you use LegalHalluLens, please cite the ICML 2026 AIWILD workshop paper."
+message: "If you use LegalHalluLens, please cite the ICML 2026 paper."
 title: "LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI"
 authors:
   - family-names: Yadav
     given-names: Lalit
+    affiliation: "Independent Researcher, Sunnyvale, CA, USA"
+    email: lalitdv94@gmail.com
   - family-names: Gurugubelli
     given-names: Akshaj
+    affiliation: "Independent Researcher, San Diego, CA, USA"
 year: 2026
 license: Apache-2.0
 repository-code: "https://github.com/lalitdv9/LegalHallulens"
@@ -15,7 +18,17 @@ preferred-citation:
   authors:
     - family-names: Yadav
       given-names: Lalit
+      affiliation: "Independent Researcher, Sunnyvale, CA, USA"
+      email: lalitdv94@gmail.com
     - family-names: Gurugubelli
       given-names: Akshaj
-  collection-title: "ICML 2026 Workshop on Agents in the Wild (AIWILD)"
+      affiliation: "Independent Researcher, San Diego, CA, USA"
+  collection-title: "Proceedings of the 43rd International Conference on Machine Learning"
+  publisher:
+    name: "PMLR"
+  volume: 306
+  conference:
+    name: "International Conference on Machine Learning"
+    city: Seoul
+    country: KR
   year: 2026

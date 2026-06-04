@@ -2,7 +2,7 @@
 LegalHalluLens utilities.
 
 Helpers for the typed hallucination auditing and calibrated multi-agent debate
-pipeline described in the LegalHalluLens paper (ICML 2026 AIWILD).
+pipeline described in the LegalHalluLens paper (ICML 2026, PMLR 306).
 """
 
 __version__ = "0.1.0"
