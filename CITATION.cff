@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use LegalHalluLens, please cite the ICML 2026 AIWILD workshop paper."
+title: "LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI"
+authors:
+  - family-names: Yadav
+    given-names: Lalit
+  - family-names: Gurugubelli
+    given-names: Akshaj
+year: 2026
+license: Apache-2.0
+repository-code: "https://github.com/lalitdv9/LegalHallulens"
+preferred-citation:
+  type: conference-paper
+  title: "LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI"
+  authors:
+    - family-names: Yadav
+      given-names: Lalit
+    - family-names: Gurugubelli
+      given-names: Akshaj
+  collection-title: "ICML 2026 Workshop on Agents in the Wild (AIWILD)"
+  year: 2026

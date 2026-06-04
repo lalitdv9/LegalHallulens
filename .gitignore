@@ -1,0 +1,33 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# macOS metadata
+.DS_Store
+**/.DS_Store
+
+# Data and per-run artifacts (not shipped with the code release)
+Notebooks/batch_results/
+*.pkl
+
+# Ablation harness — kept locally for the next paper revision, not shipped
+utils/debate_ablations.py
+
+# Local environment / API keys
+.env
+.env.*
+
+# Editor / IDE
+.idea/
+.vscode/
+.claude/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
