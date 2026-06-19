@@ -15,10 +15,21 @@ keywords = [
   "legal-ai",
   "trustworthy-ai",
   "llm-evaluation",
+  "risk-direction-index",
+  "cuad",
+  "langgraph",
 ]
 classifiers = [
   "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python :: 3.12",
   "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/lalitdv9/LegalHallulens"
+Repository = "https://github.com/lalitdv9/LegalHallulens"
+Paper = "https://arxiv.org/abs/2606.18021"
+"Hugging Face Papers" = "https://huggingface.co/papers/2606.18021"
+DOI = "https://doi.org/10.48550/arXiv.2606.18021"

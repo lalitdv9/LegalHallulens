@@ -12,8 +12,24 @@ authors:
 year: 2026
 license: Apache-2.0
 repository-code: "https://github.com/lalitdv9/LegalHallulens"
+url: "https://arxiv.org/abs/2606.18021"
+identifiers:
+  - type: other
+    value: "arXiv:2606.18021"
+    description: "The arXiv preprint of the paper."
+  - type: doi
+    value: "10.48550/arXiv.2606.18021"
+    description: "The arXiv DOI of the paper."
+keywords:
+  - typed hallucination auditing
+  - multi-agent debate
+  - legal AI
+  - trustworthy AI
+  - LLM evaluation
+  - Risk Direction Index
+  - CUAD
 preferred-citation:
-  type: conference-paper
+  type: article
   title: "LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI"
   authors:
     - family-names: Yadav
@@ -23,12 +39,8 @@ preferred-citation:
     - family-names: Gurugubelli
       given-names: Akshaj
       affiliation: "Independent Researcher, San Diego, CA, USA"
-  collection-title: "Proceedings of the 43rd International Conference on Machine Learning"
-  publisher:
-    name: "PMLR"
-  volume: 306
-  conference:
-    name: "International Conference on Machine Learning"
-    city: Seoul
-    country: KR
+  journal: "arXiv preprint arXiv:2606.18021"
+  doi: "10.48550/arXiv.2606.18021"
+  url: "https://arxiv.org/abs/2606.18021"
   year: 2026
+  notes: "To appear in Proceedings of the 43rd International Conference on Machine Learning (ICML 2026), Seoul, South Korea, PMLR 306."

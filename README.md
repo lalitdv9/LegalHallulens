@@ -2,13 +2,35 @@
 
 **Typed hallucination auditing and calibrated multi-agent debate for trustworthy legal AI.**
 
+[![arXiv](https://img.shields.io/badge/arXiv-2606.18021-b31b1b.svg)](https://arxiv.org/abs/2606.18021)
+[![Hugging Face Papers](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Papers-yellow)](https://huggingface.co/papers/2606.18021)
+[![DOI](https://img.shields.io/badge/DOI-10.48550%2FarXiv.2606.18021-blue.svg)](https://doi.org/10.48550/arXiv.2606.18021)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-green.svg)](./LICENSE)
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
+[![LangGraph](https://img.shields.io/badge/built%20with-LangGraph-1C3C3C.svg)](https://github.com/langchain-ai/langgraph)
+
+📄 **Paper:** [arXiv:2606.18021](https://arxiv.org/abs/2606.18021) · [PDF](https://arxiv.org/pdf/2606.18021) · [Hugging Face Papers](https://huggingface.co/papers/2606.18021) · [DOI](https://doi.org/10.48550/arXiv.2606.18021)
+
 Companion code for:
 
-> Lalit Yadav, Akshaj Gurugubelli. *"LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI."* Proceedings of the 43rd International Conference on Machine Learning, Seoul, South Korea. PMLR 306, 2026.
+> Lalit Yadav, Akshaj Gurugubelli. *"LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI."* arXiv:2606.18021, 2026. To appear in the Proceedings of the 43rd International Conference on Machine Learning (ICML), Seoul, South Korea. PMLR 306, 2026.
 
 **Authors:**
 - Lalit Yadav — Independent Researcher, Sunnyvale, CA, USA — `lalitdv94@gmail.com` (correspondence)
 - Akshaj Gurugubelli — Independent Researcher, San Diego, CA, USA
+
+---
+
+## Abstract
+
+AI systems deployed in legal workflows hallucinate at rates that aggregate metrics report at ~52%, but this average conceals *where* errors concentrate and in *which direction* they run, leaving compliance officers without an actionable signal for trustworthy deployment. We present **LegalHalluLens**, an auditing framework with three components: **typed hallucination profiles** across four legally-motivated claim categories (numeric, temporal, obligation/entitlement, factual) over CUAD; a **Risk Direction Index (RDI)** that reduces omission-versus-invention bias to a single deployment-comparable scalar; and a **typed debate pipeline** calibrated to both magnitudes and directions. Across 510 contracts and 249,252 clause-level instances we measure a within-model gap of ≈38–40 pp between obligation/numeric and temporal claims that aggregate reporting hides, and show that two systems with matched 52% rates can carry opposite RDIs. The debate pipeline reduces fabricated detections by **45%** with per-category gains tracking the diagnosis, matching commercial APIs with a substantially smaller backbone (4B active parameters). The framework supports direction-aware procurement, accountability, and agent design for legal AI deployed in the wild.
+
+## Highlights
+
+- 🔬 **Typed, not aggregate.** A single ~52% hallucination rate hides a ≈38–40 pp within-model gap between claim types — surfaced here as per-type profiles.
+- ↔️ **Direction matters.** Two systems with identical aggregate rates can fail in opposite directions (omission vs. invention); RDI separates them in one signed scalar.
+- 🤝 **Calibrated debate beats generic debate.** A 6-role typed LangGraph pipeline cuts fabricated detections by **45%**, with a 4B-active-parameter open backbone matching commercial APIs.
+- 📊 **Reproducible.** All extraction, judging, debate, and reporting steps ship as runnable notebooks over public CUAD v1.0.
 
 ---
 
@@ -108,6 +130,28 @@ The notebooks expect the CUAD v1.0 corpus to be locally available; they were dev
 
 ---
 
+## Links & coverage
+
+| | |
+|---|---|
+| 📄 Paper (arXiv) | https://arxiv.org/abs/2606.18021 |
+| 📥 PDF | https://arxiv.org/pdf/2606.18021 |
+| 🤗 Hugging Face Papers | https://huggingface.co/papers/2606.18021 |
+| 🔗 DOI | https://doi.org/10.48550/arXiv.2606.18021 |
+| 💻 Code | https://github.com/lalitdv9/LegalHallulens |
+| 📰 The Model Wire | https://themodelwire.com/article/legalhallulens-typed-hallucination-auditing-and-calibrated-multi-agent-debate-fo-01KV9PW34XV72K5CPVGHG49JZF |
+| 📰 gist.science | https://gist.science/paper/2606.18021 |
+
+> **Note on Papers with Code:** Papers with Code was sunset by Meta in 2025; **[Hugging Face Papers](https://huggingface.co/papers/2606.18021)** is its successor and is where this paper's code/leaderboard links now live. If you upvote, follow, or claim authorship of the paper there, please link back to this repository.
+
+---
+
+## Contributing
+
+Contributions, issues, and reproduction reports are welcome. Please see [`CONTRIBUTING.md`](./CONTRIBUTING.md) for how to set up the environment, file issues, and open pull requests.
+
+---
+
 ## License
 
 Apache 2.0. See [`LICENSE`](./LICENSE).
@@ -118,15 +162,18 @@ The gemma-4-26B-A4B backbone used in Experiment 2 is released by Google under Ap
 
 ## Citation
 
+If you use LegalHalluLens, please cite the paper. A machine-readable [`CITATION.cff`](./CITATION.cff) is also provided (GitHub renders a "Cite this repository" button from it).
+
 ```bibtex
-@inproceedings{yadav2026legalhallulens,
-  title     = {LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI},
-  author    = {Yadav, Lalit and Gurugubelli, Akshaj},
-  booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
-  series    = {Proceedings of Machine Learning Research},
-  volume    = {306},
-  address   = {Seoul, South Korea},
-  publisher = {PMLR},
-  year      = {2026},
+@article{yadav2026legalhallulens,
+  title         = {LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI},
+  author        = {Yadav, Lalit and Gurugubelli, Akshaj},
+  journal       = {arXiv preprint arXiv:2606.18021},
+  year          = {2026},
+  eprint        = {2606.18021},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  doi           = {10.48550/arXiv.2606.18021},
+  url           = {https://arxiv.org/abs/2606.18021},
 }
 ```
