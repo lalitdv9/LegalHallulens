@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use LegalHalluLens, please cite the ICML 2026 paper."
+message: "If you use LegalHalluLens, please cite the AIWILD @ ICML 2026 paper."
 title: "LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI"
 authors:
   - family-names: Yadav
@@ -43,4 +43,4 @@ preferred-citation:
   doi: "10.48550/arXiv.2606.18021"
   url: "https://arxiv.org/abs/2606.18021"
   year: 2026
-  notes: "To appear in Proceedings of the 43rd International Conference on Machine Learning (ICML 2026), Seoul, South Korea, PMLR 306."
+  notes: "Published at the Second Workshop on Agents in the Wild: Safety, Security, and Beyond (AIWILD), ICML 2026, Seoul, South Korea. Copyright 2026 by the author(s)."

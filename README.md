@@ -13,7 +13,7 @@
 
 Companion code for:
 
-> Lalit Yadav, Akshaj Gurugubelli. *"LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI."* arXiv:2606.18021, 2026. To appear in the Proceedings of the 43rd International Conference on Machine Learning (ICML), Seoul, South Korea. PMLR 306, 2026.
+> Lalit Yadav, Akshaj Gurugubelli. *"LegalHalluLens: Typed Hallucination Auditing and Calibrated Multi-Agent Debate for Trustworthy Legal AI."* arXiv:2606.18021, 2026. Published at the Second Workshop on Agents in the Wild: Safety, Security, and Beyond (AIWILD), ICML 2026, Seoul, South Korea. Copyright 2026 by the author(s).
 
 **Authors:**
 - Lalit Yadav — Independent Researcher, Sunnyvale, CA, USA — `lalitdv94@gmail.com` (correspondence)
