@@ -7,12 +7,15 @@ LLM judge, then measures inter-judge agreement on the two labels that matter:
   (1) binary verdict       -> claim_status SUPPORTED/CONTRADICTED (drives HalTP/HalGen)
   (2) directional mismatch -> judge_mismatch_type                  (drives RDI)
 
-and recomputes RDI under the second judge to show the gpt-5.2 vs qwen3-32b
-directional separation survives a judge swap.
+Runs on gpt-5.2 and qwen3-32b only — these are the two models whose RDI
+separation (+0.161 vs -0.202) is the paper's headline directional claim.
+Showing that separation survives a judge swap (gemini -> claude) is the goal.
 
-Run from the repo root: python second_judge_harness.py
+Filters to 120-contract matched subset, run_id=1 only for consistency.
+
+Run from repo root: python second_judge_harness.py
 """
-import json, time
+import time
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -24,8 +27,11 @@ from utils.clauses_prompts import CLAUSE_TO_TYPE
 # CONFIG
 # ──────────────────────────────────────────────────────────────────────────────
 SECOND_JUDGE_MODEL = "anthropic/claude-sonnet-4-5"
-PRIMARY_JUDGE_TAG  = "google/gemini-2.5-flash"
 
+# 120-contract matched subset derived from gemma baseline
+SUBSET_PKL = "Notebooks/extractions/extractions_df_google-gemma-4-26b-a4b-it_20260413_104151.pkl"
+
+# Only gpt-5.2 and qwen3-32b — the two models that matter for RDI separation
 JOBS = [
     dict(
         name="gpt-5.2",
@@ -41,20 +47,6 @@ JOBS = [
         det_col="is_impossible_ai",
         ans_col="answer_ai",
     ),
-    dict(
-        name="gemini-3-flash",
-        ext_pkl="Notebooks/extractions/extractions_df_google-gemini-3-flash-preview_20260129_221558.pkl",
-        primary_jdg_pkl="Notebooks/judge_results/judge_results_google-gemini-3-flash-preview_judged-by_google-gemini-2.5-flash_20260201_164538.pkl",
-        det_col="is_impossible_ai",
-        ans_col="answer_ai",
-    ),
-    dict(
-        name="llama-3.3-70b",
-        ext_pkl="Notebooks/extractions/extractions_df_meta-llama-llama-3.3-70b-instruct_20260131_150932.pkl",
-        primary_jdg_pkl="Notebooks/judge_results/judge_results_meta-llama-llama-3.3-70b-instruct_judged-by_google-gemini-2.5-flash_20260201_054729.pkl",
-        det_col="is_impossible_ai",
-        ans_col="answer_ai",
-    ),
 ]
 
 OUT_DIR = Path("Notebooks/second_judge_results")
@@ -62,27 +54,45 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 CHECKPOINT_EVERY = 200
 
 # ──────────────────────────────────────────────────────────────────────────────
+# Load 120-contract subset titles once
+# ──────────────────────────────────────────────────────────────────────────────
+print("Loading 120-contract subset titles...")
+_subset_df = pd.read_pickle(SUBSET_PKL)
+SUBSET_TITLES = set(_subset_df["title"].unique())
+print(f"Subset: {len(SUBSET_TITLES)} contracts\n")
+
+# ──────────────────────────────────────────────────────────────────────────────
 # Re-judging
 # ──────────────────────────────────────────────────────────────────────────────
 def rejudge_extraction(ext_df, det_col, ans_col, model, ckpt_path):
-    """Judge every TP clause (GT-present AND detected) with the second judge."""
+    """Judge every TP clause in the 120-contract subset, run_id=1 only."""
     work = ext_df[
         (ext_df["is_impossible"] == False) &
         (ext_df[det_col] == False)
     ].copy()
 
+    # Filter to 120-contract matched subset, run_id=1 only
     run_col = "run_id" if "run_id" in work.columns else None
+    if run_col:
+        work = work[work["title"].isin(SUBSET_TITLES) & (work[run_col] == 1)]
+    else:
+        work = work[work["title"].isin(SUBSET_TITLES)]
+
+    print(f"  TP clauses in 120-contract subset (run_id=1): {len(work)}")
+
     work["judge_key"] = (
         work["title"].astype(str) + "||" +
         work["clause_name"].astype(str) + "||" +
         (work[run_col].astype(str) if run_col else "1")
     )
 
+    # Resume from checkpoint if exists
     done = {}
     if Path(ckpt_path).exists():
         prev = pd.read_pickle(ckpt_path)
         done = {r["judge_key"]: r for r in prev.to_dict("records")}
-        print(f"  resume: {len(done)} already judged")
+        remaining = len(work) - len(done)
+        print(f"  resume: {len(done)} already judged, {remaining} remaining")
 
     rows, since = [], 0
     total = len(work)
@@ -113,7 +123,8 @@ def rejudge_extraction(ext_df, det_col, ans_col, model, ckpt_path):
         rows.append(rec)
         since += 1
         if i % 50 == 0:
-            print(f"  [{i+1}/{total}] latest: {r['clause_name'][:40]} -> {'SUPPORTED' if is_match else 'CONTRADICTED'}")
+            status = "SUPPORTED" if is_match else "CONTRADICTED"
+            print(f"  [{i+1}/{total}] {r['clause_name'][:40]} -> {status}")
         if since >= CHECKPOINT_EVERY:
             pd.DataFrame(rows).to_pickle(ckpt_path)
             since = 0
@@ -146,10 +157,8 @@ def bootstrap_kappa_ci(a, b, n_boot=2000, seed=42):
     if n < 5:
         return (np.nan, np.nan)
     rng = np.random.default_rng(seed)
-    ks = []
-    for _ in range(n_boot):
-        i = rng.integers(0, n, n)
-        ks.append(cohens_kappa(a[i], b[i]))
+    ks = [cohens_kappa(a[rng.integers(0, n, n)], b[rng.integers(0, n, n)])
+          for _ in range(n_boot)]
     ks = [k for k in ks if not np.isnan(k)]
     return (
         (round(float(np.percentile(ks, 2.5)), 3),
@@ -158,7 +167,11 @@ def bootstrap_kappa_ci(a, b, n_boot=2000, seed=42):
     )
 
 def rdi_from_judge(jdg, clause_type="ALL"):
-    sub = jdg if clause_type == "ALL" else jdg[jdg["clause_type"] == clause_type]
+    sub = jdg.copy()
+    if "title" in sub.columns:
+        sub = sub[sub["title"].isin(SUBSET_TITLES)]
+    if clause_type != "ALL" and "clause_type" in sub.columns:
+        sub = sub[sub["clause_type"] == clause_type]
     c = sub[sub["claim_status"] == "CONTRADICTED"]
     total = len(c)
     if total == 0:
@@ -168,6 +181,8 @@ def rdi_from_judge(jdg, clause_type="ALL"):
     return round((extra - missing) / total, 3)
 
 def align(primary, second):
+    if "title" in primary.columns:
+        primary = primary[primary["title"].isin(SUBSET_TITLES)]
     keys = [k for k in ["title", "clause_name", "run_id"]
             if k in primary.columns and k in second.columns]
     p = primary[keys + ["claim_status", "judge_mismatch_type"]].rename(
@@ -195,47 +210,45 @@ def run(jobs=None):
         if "clause_type" not in primary.columns:
             primary["clause_type"] = primary["clause_name"].map(CLAUSE_TO_TYPE)
 
-        print(f"  extraction rows : {len(ext)}")
-        print(f"  primary judge rows: {len(primary)}")
+        print(f"  extraction rows (full pkl): {len(ext)}")
+        print(f"  primary judge rows (full pkl): {len(primary)}")
 
         ckpt = OUT_DIR / f"second_judge_{job['name']}.pkl"
         second = rejudge_extraction(
             ext, job["det_col"], job["ans_col"], SECOND_JUDGE_MODEL, ckpt)
 
-        # Save final
         final_path = OUT_DIR / f"second_judge_{job['name']}_FINAL.pkl"
         second.to_pickle(final_path)
         print(f"  saved -> {final_path}")
 
         m = align(primary, second)
-        both_c = m[(m["status_P"] == "CONTRADICTED") & (m["status_S"] == "CONTRADICTED")]
+        both_c = m[
+            (m["status_P"] == "CONTRADICTED") &
+            (m["status_S"] == "CONTRADICTED")
+        ]
 
         def dirlabel(x):
             return x if x in ("missing_condition", "extra_condition") else "other"
 
-        # (1) binary kappa
-        k_bin = cohens_kappa(m["status_P"], m["status_S"])
+        k_bin  = cohens_kappa(m["status_P"], m["status_S"])
         ci_bin = bootstrap_kappa_ci(m["status_P"], m["status_S"])
-
-        # (2) directional kappa (missing/extra only)
-        k_dir = cohens_kappa(
+        k_dir  = cohens_kappa(
             both_c["mm_P"].map(dirlabel),
             both_c["mm_S"].map(dirlabel))
         ci_dir = bootstrap_kappa_ci(
             both_c["mm_P"].map(dirlabel),
             both_c["mm_S"].map(dirlabel))
 
-        # (3) RDI under each judge
         rdi_P = rdi_from_judge(primary)
         rdi_S = rdi_from_judge(second)
 
-        print(f"\n  RESULTS for {job['name']}:")
-        print(f"  aligned rows      : {len(m)}")
-        print(f"  both-contradicted : {len(both_c)}")
-        print(f"  kappa binary      : {k_bin:.3f}  CI{ci_bin}")
-        print(f"  kappa directional : {k_dir:.3f}  CI{ci_dir}")
-        print(f"  RDI primary (gemini): {rdi_P:+.3f}")
-        print(f"  RDI second (claude) : {rdi_S:+.3f}")
+        print(f"\n  RESULTS for {job['name']} (120-contract subset, run_id=1):")
+        print(f"  aligned rows        : {len(m)}")
+        print(f"  both-contradicted   : {len(both_c)}")
+        print(f"  kappa binary        : {k_bin:.3f}  CI{ci_bin}")
+        print(f"  kappa directional   : {k_dir:.3f}  CI{ci_dir}")
+        print(f"  RDI gemini (primary): {rdi_P:+.3f}")
+        print(f"  RDI claude (second) : {rdi_S:+.3f}")
         print(f"  RDI delta           : {rdi_S - rdi_P:+.3f}")
 
         summary.append(dict(
@@ -255,13 +268,13 @@ def run(jobs=None):
     summary_path = OUT_DIR / "second_judge_summary.csv"
     summary_df.to_csv(summary_path, index=False)
     print(f"\n{'='*60}")
-    print(f"COMPLETE. Summary saved -> {summary_path}")
+    print(f"COMPLETE. Summary -> {summary_path}")
     print(f"{'='*60}")
     print(summary_df.to_string(index=False))
     return summary_df
 
 
 if __name__ == "__main__":
-    # Smoke test: run gpt-5.2 only first
-    # Change to run() for all four models
-    run(jobs=[JOBS[0]])
+    # Runs gpt-5.2 and qwen3-32b on the 120-contract matched subset
+    # These are the two models whose RDI separation the paper claims
+    run()

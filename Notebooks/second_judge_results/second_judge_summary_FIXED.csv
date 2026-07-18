@@ -1,0 +1,5 @@
+model,n_aligned,n_both_contradicted,kappa_binary,kappa_binary_ci_lo,kappa_binary_ci_hi,kappa_directional,kappa_dir_ci_lo,kappa_dir_ci_hi,rdi_gemini,rdi_claude,rdi_delta
+gpt-5.2,1333,495,0.679,0.64,0.719,0.33,0.284,0.38,0.144,0.056,-0.088
+qwen3-32b,1380,667,0.748,0.713,0.783,0.313,0.263,0.364,-0.219,-0.582,-0.363
+gemini-3-flash,1446,620,0.76,0.727,0.793,0.285,0.239,0.333,-0.046,-0.388,-0.342
+llama-3.3-70b,1243,600,0.68,0.638,0.718,0.279,0.233,0.328,-0.18,-0.617,-0.437
